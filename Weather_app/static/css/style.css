@@ -5,7 +5,20 @@
     box-sizing: border-box;
     color: #fff;
     background-color: transparent;
-    
+}
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 120vh;
+    background-image: url("/img/sunny.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    transition: background-image 1s ease-in-out;
 }
 
 #container {
@@ -13,7 +26,8 @@
     width: 100%;
     position: relative;
     display: flex;
-    background-image: url("/img/Fantasy-Garden.png");
+    justify-content: center;
+
 }
 
 #container #location {
@@ -39,10 +53,15 @@
     font-size: 20px;
     color: black;
     border-radius: 15px;
+    transition: all 0.3s ease;
 }
 
 #container input::placeholder {
     color: #000000d0;
+}
+#container input:focus {
+    background-color: #f0f0f0;
+    transform: scale(1.05);
 }
 
 #container input[type="submit"] {
@@ -52,6 +71,11 @@
     color: white;
     font-weight: 700;
     font-size: 22px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+#container input[type="submit"]:hover {
+    background-color: #444444;
+    transform: scale(1.05);
 }
 
 #tempIcon {
@@ -59,38 +83,60 @@
     width: 150px;
     position: absolute;
     top: 35%;
-    left: 60%;
-    
+    left:45%;
+    transition: transform 0.5s ease-in-out;
+    z-index: 2;
+
+}
+#tempIcon:hover {
+    transform: scale(1.1);
 }
 
 #weatherCountry {
     font-size: 40px;
     position: absolute;
-    top: 37%;
+    top: 15%;
     margin-left: auto;
-    margin-right: 20%;
+    margin-right: 40%;
 }
-
+.country-icon {
+    width: 45px; /* Adjust size */
+    height: 45px; /* Adjust size */
+    position: absolute;
+    right: 100%;
+}
 #temperature {
     font-size: 45px;
     position: absolute;
-    top: 45%;
-    left: 37%;
+    top: 30%;
+    left: 20%;
 
 }
 
 #temperature b {
-    color: red;
+    color: #e79f01;
 }
 
 #weatherDescription {
     font-size: 20px;
     text-transform: capitalize;
     position: absolute;
-    bottom: 38%;
-    left: 60%;
+    bottom: 40%;
+    left: 67%;
+}
+#weatherCountry, #temperature, #weatherDescription {
+    opacity: 0;
+    animation: fadeIn 1.3s ease-in-out forwards;
 }
 
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
 #container ul {
     position: absolute;
     bottom: 17%;
@@ -108,35 +154,140 @@
 
 .features
 {
-    justify-content: center;
+    position: fixed;
+    top: 55%;
+    right: 55%;
+}
+.features li b{
+    font-size: 20px;
 }
 
 .flex
 {
-  background: #000000d0;
-  color: white;
-  padding: 2em;
-  border-radius: 30px;
-  width: 100%;
-  max-width: 700px;
-  height: 30rem;
-  margin: 1em;
-  margin-top: 14rem;
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  justify-content: center;
+    background: rgb(0, 0, 0,0.5);
+    position: relative;
+    padding: 2em;
+    border-radius: 30px;
+    width: 100%;
+    max-width: 700px;
+    height: 30rem;
+    margin: 1em;
+    margin-top: 14rem;
+    margin-left: 5rem;
+    margin-right: auto;
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
 }
 
-.h1
+.flex #weatherDescription {
+    margin-left: 2rem;
+    margin-right: auto;
+    font-size: 24px;
+    text-transform: capitalize;
+    color: #000000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease-in-out;
+}
+
+.flex #weatherDescription.visible {
+    opacity: 1;
+    transform: translateY(0);
+    color: #e79f01;
+    font-size: 30px;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+#error_msg
 {
-    margin-left: 28rem;
-    margin-top: 25rem;
+    margin-left: 13rem;
+    margin-top: 26rem;
     font-size: 1.5rem;
     font-family: "myFirstFont";
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in-out forwards, shake 0.5s ease-in-out 1.5s;
 }
 
+
 @font-face {
-    font-family: "myFirstFont"; 
+    font-family: "myFirstFont";
     src: url("/img/ticking-timebomb-bb.regular.ttf");
 }
+
+
+
+/*Side bar*/
+
+.forecast-container {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 16px;
+    width: 90%;
+    top: 8%;
+    right: 7%;
+    backdrop-filter: blur(5px);
+    max-width: 400px;
+    margin: 0;
+    position: relative;  /* Ensures it's part of the layout */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.title {
+    font-size: 1.5rem;
+    margin: 0 0 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    padding-bottom: 10px;
+}
+
+.forecast {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.day {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.day-name {
+    flex: 1;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.icon {
+    font-size: 1.5rem;
+}
+
+.temp-min,
+.temp-max {
+    font-size: 0.9rem;
+    width: 40px;
+    text-align: center;
+}
+
+
+
+.progress-bar {
+    flex: 2;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress {
+    height: 100%;
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    border-radius: 4px;
+    transition: width 0.3s ease-in-out;
+}
+
+
+
+

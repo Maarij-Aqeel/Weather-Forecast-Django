@@ -8,38 +8,87 @@
     <link rel="stylesheet" href={% static "css/style.css" %}>
 </head>
 <body>
-    <div id="container">
+     <div id="container">
         <div id="location">
-            <form method="POST" action="{% url 'weather' %}">
-            {% csrf_token %}
             <input type="text" id="country" placeholder="Country">
             <input type="text" id="city" placeholder="City">
             <input type="submit" id="check" value="Go">
-            </form>
-
         </div>
         <img src="/img/clouds.svg" alt="" id="tempIcon">
         <div class="flex">
-            {% if Error %}
-            <p >{{Error}}</p>
-            {% else %}
-        <h2 id="weatherCountry">{{ sky }}</h2>
-        <h2 id="temperature">{{ temp }}<b>C</b></h2>
-        <h2 id="weatherDescription">{{ sky_desc }}</h2>
-            {% endif %}
+        <div id="weatherCountry">
+            <img src="/img/location.png" alt="Location Icon" class="country-icon">Pakistan
+        </div>
+        <h2 id="temperature">0<b>°C</b></h2>
+        <h2 id="weatherDescription">clear</h2>
         <ul>
             <div class="features">
-            <li id="feelsLike">Feels Like 0°C</li>
-            <li id="humidity">Humidity 0</li>
-            <li id="longitude">Longitude 0</li>
-            <li id="latitude">Latitude 0</li>
+        <li id="feelsLike"><b>Feels Like:</b> 0°C</li>
+        <li id="humidity"><b>Humidity:</b> 10</li>
+        <li id="wind_spd"><b>Wind Speed:</b> 0</li>
+        <li id="longitude"><b>Longitude:</b> 0</li>
+        <li id="latitude"><b>Latitude:</b> 0</li>
+
             </div>
         </ul>
-        <div class="h1">Maarij</div>
+        <div id="error_msg"></div>
         </div>
     </div>
-    {% block js %}
-    <script src="/Weather_app/static/script.js"></script>
-    {% endblock js %}
+
+<!--    Scroll/-->
+    <div class="forecast-container">
+        <h1 class="title">5-Day Forecast</h1>
+        <div class="forecast">
+            <div class="day">
+                <span class="day-name" id="day1">Today</span>
+                <span class="icon">🌧️</span>
+                <span class="temp-min" id="temp1">18°C</span>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 60%;"></div>
+                </div>
+                <span class="temp-max" id="temp_max1">32°C</span>
+            </div>
+            <div class="day">
+                <span class="day-name" id="day2">Thu</span>
+                <span class="icon">⛈️</span>
+                <span class="temp-min" id="temp2">20°C</span>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 50%;"></div>
+                </div>
+                <span class="temp-max" id="temp_max2">29°C</span>
+            </div>
+            <div class="day">
+                <span class="day-name" id="day3">Fri</span>
+                <span class="icon">🌥️</span>
+                <span class="temp-min" id="temp3">23°C</span>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 70%;"></div>
+                </div>
+                <span class="temp-max" id="temp_max3">31°C</span>
+            </div>
+            <div class="day">
+                <span class="day-name" id="day4">Sat</span>
+                <span class="icon">🌤️</span>
+                <span class="temp-min" id="temp4">22°C</span>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 55%;"></div>
+                </div>
+                <span class="temp-max" id="temp_max4">29°C</span>
+            </div>
+            <div class="day">
+                <span class="day-name" id="day5">Sun</span>
+                <span class="icon">🌥️</span>
+                <span class="temp-min" id="temp5">23°C</span>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 80%;"></div>
+                </div>
+                <span class="temp-max" id="temp_max5">33°C</span>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/side_bar.js' %}"></script>
+    <div id="additional-content"></div>
+    <script>const API_KEY="{{ api_key }}"</script>
+    <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>
