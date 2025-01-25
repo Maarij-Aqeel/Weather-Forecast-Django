@@ -10,15 +10,23 @@
 <body>
     <div id="container">
         <div id="location">
+            <form method="POST" action="{% url 'weather' %}">
+            {% csrf_token %}
             <input type="text" id="country" placeholder="Country">
             <input type="text" id="city" placeholder="City">
             <input type="submit" id="check" value="Go">
+            </form>
+
         </div>
         <img src="/img/clouds.svg" alt="" id="tempIcon">
         <div class="flex">
-        <h2 id="weatherCountry">City/Country</h2>
-        <h2 id="temperature">0°<b>C</b></h2>
-        <h2 id="weatherDescription">Description</h2>
+            {% if Error %}
+            <p >{{Error}}</p>
+            {% else %}
+        <h2 id="weatherCountry">{{ sky }}</h2>
+        <h2 id="temperature">{{ temp }}<b>C</b></h2>
+        <h2 id="weatherDescription">{{ sky_desc }}</h2>
+            {% endif %}
         <ul>
             <div class="features">
             <li id="feelsLike">Feels Like 0°C</li>
