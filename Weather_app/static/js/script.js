@@ -10,6 +10,9 @@ let humidity = document.querySelector("#humidity");
 let longitude = document.querySelector("#longitude");
 let latitude = document.querySelector("#latitude");
 let wind_spd = document.querySelector("#wind_spd");
+let feature= document.querySelector(".features");
+let forecastContainer=document.querySelector(".forecast-container");
+let error_msg=document.querySelector("#error_msg");
 
 let defaultCountry = "Pakistan"; // Default country
 let defaultCity = "Faisalabad"; // Default city
@@ -17,8 +20,7 @@ const key=API_KEY;
 
 function fetchWeather(cityValue, countryValue) {
     let url = `https://api.openweathermap.org/data/2.5/weather?q=${cityValue},${countryValue}&lang=en&units=metric&appid=${key}`;
-    let error_msg=document.querySelector("#error_msg");
-
+    let weather_img=''
 
 
     fetch(url)
@@ -26,40 +28,42 @@ function fetchWeather(cityValue, countryValue) {
             return response.json();
         })
         .then(data => {
-            console.log(data);
             weatherCountry.innerHTML = `<img src="/img/location.png" alt="Location Icon" class="country-icon">${data.name} / ${data.sys.country}`;
             temperature.innerHTML = `${data.main.temp}<b>°C</b>`;
+
 
 
             data.weather.forEach(items => {
                 weatherDescription.innerText = items.description;
 
                 if (items.id < 250) {
-                    tempIcon.src = `/img/isolated-thunderstorms.svg`;
+                    weather_img=`/img/isolated-thunderstorms.svg`;
                     document.body.style.backgroundImage = "url('/img/storm.jpg')";
 
                 } else if (items.id < 350) {
-                    tempIcon.src = `/img/hail.svg`;//Weather icon
+                    weather_img = `/img/hail.svg`;//Weather icon
                     document.body.style.backgroundImage = "url('/img/drizzle.jpg')";//Background image
 
                 } else if (items.id < 550) {
-                    tempIcon.src = `/img/rainy-1.svg`;
+                    weather_img = `/img/rainy-1.svg`;
                     document.body.style.backgroundImage = "url('/img/rain.jpg')";
                 } else if (items.id < 650) {
-                    tempIcon.src = `/img/snowy-1.svg`;
+                    weather_img = `/img/snowy-1.svg`;
                     document.body.style.backgroundImage = "url('/img/snow.jpg')";
                 } else if (items.id < 800) {
-                    tempIcon.src = `/img/haze-day.svg`;
+                    weather_img = `/img/haze-day.svg`;
                     document.body.style.backgroundImage = "url('/img/atmosphere.jpg')";
                 } else if (items.id === 800) {
-                    tempIcon.src = `/img/clear-day.svg`;
+                    weather_img = `/img/clear-day.svg`;
                     document.body.style.backgroundImage = "url('/img/sunny.jpg')";
 
                 } else if (items.id > 800) {
-                    tempIcon.src = `/img/cloudy.svg`;
+                    weather_img = `/img/cloudy.svg`;
                     document.body.style.backgroundImage = "url('/img/clouds.jpg')";
 
                 }
+
+                change_tempicon(weather_img);
             });
             error_msg.innerText="";
 
@@ -70,14 +74,12 @@ function fetchWeather(cityValue, countryValue) {
             wind_spd.innerHTML=`<b>Wind Speed:</b> ${data.wind.speed}`;
         })
         .catch(error => {
-
             error_msg.innerText="Error: Check country and city";
         });
 }
 
 function fetch_5_day(cityValue) {
     let url_5day = `https://api.openweathermap.org/data/2.5/forecast?q=${cityValue}&appid=${key}&units=metric`;
-    let error_msg = document.querySelector("#error_msg");
 
     fetch(url_5day)
         .then(response => {
@@ -107,8 +109,6 @@ function fetch_5_day(cityValue) {
                 get_icon(weather_id,weather_icon);//Changing the icon
 
 
-
-
                 // Set the inner HTML for the day element
                 if (index===0){
                     dayElement.innerHTML = `<b>Today</b>`;
@@ -127,20 +127,30 @@ function fetch_5_day(cityValue) {
                 temp_max_ele.innerHTML = `${tempMax.toFixed(0)}°C`;
 
 
-
-
             });
         })
         .catch(error => {
-            error_msg.innerText = "Error: fetching the 5-day forecast. ${error}" ;
-            console.error(error);
+            error_msg.innerText = "Error: fetching the Data." ;
         });
 }
 
 
+// Changing the weather icon
+function change_tempicon(img_src)
+{
+    tempIcon.classList.add("hidden");
+
+    setTimeout(() =>{
+
+        tempIcon.src=img_src;
+        tempIcon.onload = () => tempIcon.classList.remove("hidden");
+    },500);
+
+
+}
 function get_icon(id,weather_icon){
 
-    let imgSrc = ""; // Default image source
+    let imgSrc = "";
 
     if (id < 250) {
         imgSrc = "/img/storm.svg";
@@ -168,29 +178,26 @@ window.addEventListener("load", () => {
     country.value = defaultCountry; // Set default country in input
     city.value = defaultCity; // Set default city in input
     fetchWeather(defaultCity, defaultCountry);
-    document.querySelector('.features').classList.add('fade_out');
+    feature.classList.add('fade_out');
     weatherDescription.classList.add('visible');
+    forecastContainer.classList.add('open');
 
 });
 
 // Button click action
 check.addEventListener("click", () => {
-    weatherDescription.classList.remove("visible");
-    const feature=document.querySelector('.features');
-    const forecastContainer = document.querySelector('.forecast-container');
+
     forecastContainer.classList.remove('open');
     feature.classList.remove('fade_out');
     weatherDescription.classList.remove('visible');
 
 
+//changing the transitions
     setTimeout(() => {
         forecastContainer.classList.add('open');
         feature.classList.add('fade_out');
         weatherDescription.classList.add('visible');
-
-    }, 500); //
-
-
+    }, 500);
 
     fetchWeather(city.value, country.value);
     fetch_5_day(city.value);
