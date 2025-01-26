@@ -19,6 +19,8 @@ function fetchWeather(cityValue, countryValue) {
     let url = `https://api.openweathermap.org/data/2.5/weather?q=${cityValue},${countryValue}&lang=en&units=metric&appid=${key}`;
     let error_msg=document.querySelector("#error_msg");
 
+
+
     fetch(url)
         .then(response => {
             return response.json();
@@ -27,40 +29,40 @@ function fetchWeather(cityValue, countryValue) {
             console.log(data);
             weatherCountry.innerHTML = `<img src="/img/location.png" alt="Location Icon" class="country-icon">${data.name} / ${data.sys.country}`;
             temperature.innerHTML = `${data.main.temp}<b>°C</b>`;
-            weatherDescription.classList.remove("visible");
+
 
             data.weather.forEach(items => {
                 weatherDescription.innerText = items.description;
-                weatherDescription.classList.add("visible");
 
                 if (items.id < 250) {
-                    tempIcon.src = `/img/storm.svg`;
+                    tempIcon.src = `/img/isolated-thunderstorms.svg`;
                     document.body.style.backgroundImage = "url('/img/storm.jpg')";
 
                 } else if (items.id < 350) {
-                    tempIcon.src = `/img/drizzle.svg`;
-                    document.body.style.backgroundImage = "url('/img/drizzle.jpg')";
+                    tempIcon.src = `/img/hail.svg`;//Weather icon
+                    document.body.style.backgroundImage = "url('/img/drizzle.jpg')";//Background image
 
                 } else if (items.id < 550) {
-                    tempIcon.src = `/img/rain.svg`;
+                    tempIcon.src = `/img/rainy-1.svg`;
                     document.body.style.backgroundImage = "url('/img/rain.jpg')";
                 } else if (items.id < 650) {
-                    tempIcon.src = `/img/snow.svg`;
+                    tempIcon.src = `/img/snowy-1.svg`;
                     document.body.style.backgroundImage = "url('/img/snow.jpg')";
                 } else if (items.id < 800) {
-                    tempIcon.src = `/img/atmosphere.svg`;
+                    tempIcon.src = `/img/haze-day.svg`;
                     document.body.style.backgroundImage = "url('/img/atmosphere.jpg')";
                 } else if (items.id === 800) {
-                    tempIcon.src = `/img/sun.svg`;
+                    tempIcon.src = `/img/clear-day.svg`;
                     document.body.style.backgroundImage = "url('/img/sunny.jpg')";
 
                 } else if (items.id > 800) {
-                    tempIcon.src = `/img/clouds.svg`;
+                    tempIcon.src = `/img/cloudy.svg`;
                     document.body.style.backgroundImage = "url('/img/clouds.jpg')";
 
                 }
             });
             error_msg.innerText="";
+
             feelsLike.innerHTML = `<b>Feels Like:</b> ${data.main.feels_like}°C`;
             humidity.innerHTML = `<b>Humidity:</b> ${data.main.humidity}`;
             latitude.innerHTML = `<b>Latitude:</b> ${data.coord.lat}`;
@@ -89,53 +91,108 @@ function fetch_5_day(cityValue) {
             // Iterate for 5 days
             dailyForecast.slice(0, 5).forEach((day, index) => {
                 let dayElement = document.querySelector(`#day${index + 1}`);
-                let date = new Date(day.dt * 1000); // Get the raw Date object
-
-                // Day of week
-                let dayOfWeek = daysOfWeek[date.getDay()];
-
+                let weather_icon=document.querySelector(`#icon${index + 1}`);
 
                 //Min and max temperature entry
                 let temp_min_ele = document.querySelector(`#temp${index + 1}`);
                 let temp_max_ele = document.querySelector(`#temp_max${index + 1}`);
 
+                let weather_id=day.weather[0].id;
+                let date = new Date(day.dt * 1000); // Get the raw Date object
+
                 // Extract the min and max temperatures
                 let tempMin = day.main.temp_min;
                 let tempMax = day.main.temp_max;
 
-                // Set the inner HTML for min and max temperatures
-                temp_min_ele.innerHTML = `${tempMin.toFixed(0)}°C`;
-                temp_max_ele.innerHTML = `${tempMax.toFixed(0)}°C`;
+                get_icon(weather_id,weather_icon);//Changing the icon
+
+
+
 
                 // Set the inner HTML for the day element
                 if (index===0){
                     dayElement.innerHTML = `<b>Today</b>`;
                 }
                 else {
+
+                // Day of week
+                let dayOfWeek = daysOfWeek[date.getDay()];
                 dayElement.innerHTML = `<b>${dayOfWeek.slice(0,3)}</b>`;
-                    }
+
+                }
+
+
+                // Set the inner HTML for min and max temperatures
+                temp_min_ele.innerHTML = `${tempMin.toFixed(0)}°C`;
+                temp_max_ele.innerHTML = `${tempMax.toFixed(0)}°C`;
+
+
+
+
             });
         })
         .catch(error => {
-            error_msg.innerText = "Error: fetching the 5-day forecast.";
+            error_msg.innerText = "Error: fetching the 5-day forecast. ${error}" ;
             console.error(error);
         });
 }
 
 
+function get_icon(id,weather_icon){
+
+    let imgSrc = ""; // Default image source
+
+    if (id < 250) {
+        imgSrc = "/img/storm.svg";
+    } else if (id < 350) {
+        imgSrc = "/img/drizzle.svg";
+    } else if (id < 550) {
+        imgSrc = "/img/rain.svg";
+    } else if (id < 650) {
+        imgSrc = "/img/snow.svg";
+    } else if (id < 800) {
+        imgSrc = "/img/atmosphere.svg";
+    } else if (id === 800) {
+        imgSrc = "/img/sun.svg";
+    } else if (id > 800) {
+        imgSrc = "/img/clouds.svg";
+    }
+    weather_icon.src= imgSrc;
+}
+
 
 
 // Default location
 window.addEventListener("load", () => {
+
     country.value = defaultCountry; // Set default country in input
     city.value = defaultCity; // Set default city in input
     fetchWeather(defaultCity, defaultCountry);
+    document.querySelector('.features').classList.add('fade_out');
+    weatherDescription.classList.add('visible');
+
 });
 
 // Button click action
 check.addEventListener("click", () => {
+    weatherDescription.classList.remove("visible");
+    const feature=document.querySelector('.features');
+    const forecastContainer = document.querySelector('.forecast-container');
+    forecastContainer.classList.remove('open');
+    feature.classList.remove('fade_out');
+    weatherDescription.classList.remove('visible');
+
+
+    setTimeout(() => {
+        forecastContainer.classList.add('open');
+        feature.classList.add('fade_out');
+        weatherDescription.classList.add('visible');
+
+    }, 500); //
+
+
+
     fetchWeather(city.value, country.value);
     fetch_5_day(city.value);
-    // country.value = "";
-    // city.value = "";
+
 });

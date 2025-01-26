@@ -79,8 +79,8 @@ body {
 }
 
 #tempIcon {
-    height: 150px;
-    width: 150px;
+    height: 170px;
+    width: 170px;
     position: absolute;
     top: 35%;
     left:45%;
@@ -157,11 +157,19 @@ body {
     position: fixed;
     top: 55%;
     right: 55%;
+    opacity: 0;
+    transition: opacity 1.2s ease;
 }
+
+.features.fade_out
+{
+    opacity: 1;
+}
+
+
 .features li b{
     font-size: 20px;
 }
-
 .flex
 {
     background: rgb(0, 0, 0,0.5);
@@ -217,77 +225,124 @@ body {
 
 
 /*Side bar*/
+.forecast-wrapper {
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+        }
 
-.forecast-container {
-    background: rgba(0, 0, 0, 0.6);
-    padding: 20px;
-    border-radius: 16px;
-    width: 90%;
-    top: 8%;
-    right: 7%;
-    backdrop-filter: blur(5px);
-    max-width: 400px;
-    margin: 0;
-    position: relative;  /* Ensures it's part of the layout */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
+        .forecast-container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            height: 40px;
+            transition: height 0.5s ease, padding 0.3s ease;
+        }
 
-.title {
-    font-size: 1.5rem;
-    margin: 0 0 20px;
-    text-align: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-    padding-bottom: 10px;
-}
+        .forecast-container.open {
+            height: 420px;
+            padding: 20px;
+        }
 
-.forecast {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
+        .title {
+            font-size: 1.5rem;
+            margin: 0 0 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+            padding-bottom: 10px;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
 
-.day {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-}
+        .forecast-container.open .title {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-.day-name {
-    flex: 1;
-    font-size: 1rem;
-    font-weight: bold;
-}
+        .forecast {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s;
+        }
 
-.icon {
-    font-size: 1.5rem;
-}
+        .forecast-container.open .forecast {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-.temp-min,
-.temp-max {
-    font-size: 0.9rem;
-    width: 40px;
-    text-align: center;
-}
+        .day {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
 
+        .day-name {
+            flex: 1;
+            font-size: 1rem;
+            font-weight: bold;
+        }
 
+        .icon {
+            width: 50px;
+            height: 50px;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
 
-.progress-bar {
-    flex: 2;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    overflow: hidden;
-    position: relative;
-}
+        .icon:hover {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
 
-.progress {
-    height: 100%;
-    background: linear-gradient(90deg, #4facfe, #00f2fe);
-    border-radius: 4px;
-    transition: width 0.3s ease-in-out;
-}
+        .temp-min,
+        .temp-max {
+            font-size: 0.9rem;
+            width: 40px;
+            text-align: center;
+        }
 
+        .progress-bar {
+            flex: 2;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
 
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            border-radius: 4px;
+            transition: width 0.3s ease-in-out;
+        }
+
+        .toggle-button {
+            margin: 10px auto;
+            display: block;
+            padding: 10px 20px;
+            background: #4facfe;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-button:hover {
+            background: #00f2fe;
+        }
 
 
