@@ -13,7 +13,12 @@ Welcome to my **Django Weather Website**, a dynamic weather app built using the 
 - **HTML/CSS**: For building the user interface.  
 
 ## 📸 Preview  
-*(Add screenshots or GIFs here)*  
+![Screenshot1](screenshots/Img1.png)
+![Screenshot2](screenshots/Img2.png)
+![Screenshot3](screenshots/Img3.png)
+![Screenshot4](screenshots/Img4.png)
+
+  
 
 ## 🚀 How to Run the Project  
 1. Clone this repository:  
